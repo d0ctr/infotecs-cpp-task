@@ -84,6 +84,10 @@ void OutputProcessor::start()
     {
       std::cerr << e.what() << std::endl;
       exception_occured = true;
+      if(std::cin.eof())
+      {
+        std::terminate();
+      }
     }
   }
 }

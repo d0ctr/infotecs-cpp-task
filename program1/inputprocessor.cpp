@@ -69,6 +69,10 @@ std::string InputProcessor::readInput()
   std::string newline;
   std::cout << "> ";
   std::cin >> newline;
+  if(std::cin.eof())
+  {
+    throw std::invalid_argument("None empty line required.");
+  }
   return newline;
 }
 
@@ -111,11 +115,16 @@ void InputProcessor::start()
       }
       mutex_ptr->unlock();
       std::this_thread::yield();
+      
     }
     catch(std::exception &e)
     {
       std::cerr << e.what() << std::endl;
       exception_occured = true;
+      if(std::cin.eof())
+      {
+        std::terminate();
+      }
     }
   }
 }
