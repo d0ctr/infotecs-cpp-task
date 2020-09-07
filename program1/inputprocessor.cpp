@@ -123,7 +123,7 @@ void InputProcessor::start()
       exception_occured = true;
       if(std::cin.eof())
       {
-        std::terminate();
+        break;
       }
     }
   }

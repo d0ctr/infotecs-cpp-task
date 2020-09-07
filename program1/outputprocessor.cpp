@@ -86,7 +86,7 @@ void OutputProcessor::start()
       exception_occured = true;
       if(std::cin.eof())
       {
-        std::terminate();
+        break;
       }
     }
   }

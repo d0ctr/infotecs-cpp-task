@@ -4,7 +4,7 @@ LDFLAGS =  -fsanitize=address
 
 SRC = main.cpp inputprocessor.cpp outputprocessor.cpp
 OBJ = $(SRC:.cc=.o)
-EXEC = program1
+EXEC = program1.out
 
 all: $(EXEC)
 
