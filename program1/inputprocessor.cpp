@@ -71,7 +71,7 @@ std::string InputProcessor::readInput()
   std::cin >> newline;
   if(std::cin.eof())
   {
-    throw std::invalid_argument("None empty line required.");
+    throw std::invalid_argument("EOF has been received, application will end itself now.");
   }
   return newline;
 }
@@ -127,4 +127,5 @@ void InputProcessor::start()
       }
     }
   }
+  mutex_ptr->unlock();
 }

@@ -82,12 +82,13 @@ void OutputProcessor::start()
     }
     catch(std::exception &e)
     {
-      std::cerr << e.what() << std::endl;
-      exception_occured = true;
       if(std::cin.eof())
       {
         break;
       }
+      std::cerr << e.what() << std::endl;
+      exception_occured = true;
     }
   }
+  mutex_ptr->unlock();
 }
