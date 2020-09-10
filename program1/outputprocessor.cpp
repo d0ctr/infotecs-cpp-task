@@ -14,8 +14,9 @@ OutputProcessor::OutputProcessor(std::shared_ptr<std::mutex> &mutex_ptr)
 OutputProcessor::OutputProcessor(std::shared_ptr<std::mutex> &mutex_ptr, std::string socket_name)
 {
   this->mutex_ptr = mutex_ptr;
+  socket_name += "1";
   exception_occured = false;
-  conn = ConnectionClient(socket_name);
+  conn = ConnectionClient();
 }
 
 OutputProcessor::~OutputProcessor()
@@ -71,7 +72,7 @@ std::string OutputProcessor::readFromBuffer()
 
 void OutputProcessor::start()
 {
-  conn.connectToServer();
+  // conn.connectToServer();
   while(true)
   {
     try
@@ -90,11 +91,11 @@ void OutputProcessor::start()
     }
     catch(std::exception &e)
     {
-      if(std::cin.eof())
-      {
-        break;
-      }
-      std::cerr << e.what() << std::endl;
+      // if(std::cin.eof())
+      // {
+      //   break;
+      // }
+      std::cerr << e.what() << '\n';
       exception_occured = true;
     }
   }

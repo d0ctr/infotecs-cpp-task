@@ -10,11 +10,12 @@
 #include <string>
 #include <sys/unistd.h>
 
+#define NAME "program1_program2"
+
 class ConnectionClient
 {
   public:
-    ConnectionClient() = default;
-    ConnectionClient(std::string socket_name);
+    ConnectionClient();
     ~ConnectionClient();
     void generateSocketDescriptor();
     void connectToServer();

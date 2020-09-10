@@ -10,10 +10,12 @@
 #include <string>
 #include <sys/unistd.h>
 
+#define NAME "program1_program2"
+
 class ConnectionHost
 {
   public:
-    ConnectionHost(std::string socket_name);
+    ConnectionHost();
     ~ConnectionHost();
     void generateSocketDescriptor();
     void bindSocketName();
