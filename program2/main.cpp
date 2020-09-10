@@ -1,15 +1,15 @@
 #include "connectionhost.hpp"
 #include <iostream>
 
-#define DOMAIN AF_LOCAL
-#define TYPE SOCK_STREAM
-#define PROTOCOL 0
+
+#define SOCKETNAME "program1_program2"
 
 int main()
 {
   try
   {
-    ConnectionHost ch(DOMAIN, TYPE, PROTOCOL);
+    ConnectionHost ch(SOCKETNAME);
+    ch.hostServer();
   }
   catch(const std::exception& e)
   {

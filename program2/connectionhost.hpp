@@ -6,15 +6,25 @@
 #include <stdexcept>
 #include <iostream>
 #include <cstdlib>
+#include <sys/un.h>
+#include <string>
+#include <sys/unistd.h>
 
 class ConnectionHost
 {
   public:
-    ConnectionHost(int domain, int type, int protocol);
+    ConnectionHost(std::string socket_name);
+    ~ConnectionHost();
+    void generateSocketDescriptor();
+    void bindSocketName();
+    void waitForClient();
+    void hostServer();
   private:
-    int domain;
-    int type;
-    int protocol;
-    int sockfd;
+    int server_socket;
+    int client_socket;
+    struct sockaddr_un server_socket_name;
+    struct sockaddr client_socket_name;
+    socklen_t server_socket_name_size;
+    socklen_t client_socket_name_size;
 };
 #endif
