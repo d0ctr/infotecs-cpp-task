@@ -16,7 +16,7 @@ OutputProcessor::OutputProcessor(std::shared_ptr<std::mutex> &mutex_ptr, std::st
   this->mutex_ptr = mutex_ptr;
   socket_name += "1";
   exception_occured = false;
-  conn = ConnectionClient();
+  connection = ConnectionHost();
 }
 
 OutputProcessor::~OutputProcessor()
@@ -60,44 +60,51 @@ std::string OutputProcessor::readFromBuffer()
   }
   else
   {
-    throw std::ios_base::failure("Error reading buffer.");
+    throw std::invalid_argument("Error reading buffer.");
   }
   buf.close();
   if(std::remove("buf") != 0)
   {
-    throw std::ios_base::failure("Error deleting file.");
+    throw std::invalid_argument("Error deleting file.");
   }
   return line;
 }
 
 void OutputProcessor::start()
 {
-  // conn.connectToServer();
-  while(true)
+  try
   {
-    try
+    connection.hostServer();
+    while(true)
     {
-      if(!exception_occured)
+      try
       {
-        mutex_ptr->lock();
-      }
-      exception_occured = false;
+        if(!exception_occured)
+        {
+          mutex_ptr->lock();
+        }
+        exception_occured = false;
 
-      std::string line = readFromBuffer();
-      std::cout << "Read from buffer: " << line << std::endl;
-      
-      mutex_ptr->unlock();
-      std::this_thread::yield();
+        std::string line = readFromBuffer();
+        std::cout << "Read from buffer: " << line << std::endl;
+        
+        mutex_ptr->unlock();
+        std::this_thread::yield();
+      }
+      catch(std::exception &e)
+      {
+        if(std::cin.eof())
+        {
+          break;
+        }
+        std::cerr << e.what() << '\n';
+        exception_occured = true;
+      }
     }
-    catch(std::exception &e)
-    {
-      // if(std::cin.eof())
-      // {
-      //   break;
-      // }
-      std::cerr << e.what() << '\n';
-      exception_occured = true;
-    }
+  }
+  catch(const std::exception& e)
+  {
+    std::cerr << e.what() << '\n';
   }
   mutex_ptr->unlock();
 }

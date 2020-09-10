@@ -11,7 +11,7 @@
 #include <sys/types.h>
 #include <sys/un.h>
 
-#include "connectionclient.hpp"
+#include "connectionhost.hpp"
 
 class OutputProcessor
 {
@@ -28,6 +28,6 @@ class OutputProcessor
     std::string readFromBuffer();
     bool exception_occured;
     std::shared_ptr<std::mutex> mutex_ptr;
-    ConnectionClient conn;
+    ConnectionHost connection;
 };
 #endif

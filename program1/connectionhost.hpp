@@ -9,19 +9,18 @@
 #include <sys/un.h>
 #include <string>
 #include <sys/unistd.h>
+#include <stdio.h>
 
-#define NAME "program1_program2"
+#define NAME "/tmp/program1_program2"
 
 class ConnectionHost
 {
   public:
-    ConnectionHost();
+    ConnectionHost() = default;
     ~ConnectionHost();
-    void generateSocketDescriptor();
-    void bindSocketName();
-    void waitForClient();
     void hostServer();
   private:
+    FILE *client_stream;
     int server_socket;
     int client_socket;
     struct sockaddr_un server_socket_name;

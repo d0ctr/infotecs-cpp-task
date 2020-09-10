@@ -69,10 +69,10 @@ std::string InputProcessor::readInput()
   std::string newline;
   std::cout << "> ";
   std::cin >> newline;
-  // if(std::cin.eof())
-  // {
-  //   throw std::invalid_argument("EOF has been received, application will end itself now.");
-  // }
+  if(std::cin.eof())
+  {
+    throw std::invalid_argument("EOF has been received, application will end itself now.");
+  }
   return newline;
 }
 
@@ -121,10 +121,10 @@ void InputProcessor::start()
     {
       std::cerr << e.what() << '\n';
       exception_occured = true;
-      // if(std::cin.eof())
-      // {
-      //   break;
-      // }
+      if(std::cin.eof())
+      {
+        break;
+      }
     }
   }
   mutex_ptr->unlock();

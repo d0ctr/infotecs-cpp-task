@@ -9,20 +9,21 @@
 #include <sys/un.h>
 #include <string>
 #include <sys/unistd.h>
+#include <stdio.h>
 
-#define NAME "program1_program2"
+#define NAME "/tmp/program1_program2"
 
 class ConnectionClient
 {
   public:
-    ConnectionClient();
+    ConnectionClient() = default;
     ~ConnectionClient();
-    void generateSocketDescriptor();
     void connectToServer();
-    void send();
+    void tryToSend(const std::string line);
   private:
+    FILE *server_stream;
     int server_socket;
-    sockaddr_un server_socket_name;
+    struct sockaddr_un server_socket_name;
     socklen_t server_socket_name_size;
 };
 #endif

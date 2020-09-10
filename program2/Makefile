@@ -1,8 +1,8 @@
 CXX = g++
-CXXFLAGS = -Wall -Werror -Wextra -pedantic -std=c++11 -g -fsanitize=address
+CXXFLAGS = -Wall -Werror -Wextra -pedantic -g -fsanitize=address
 LDFLAGS =  -fsanitize=address
 
-SRC = main.cpp connectionhost.cpp
+SRC = main.cpp connectionclient.cpp
 OBJ = $(SRC:.cc=.o)
 EXEC = program2.out
 
