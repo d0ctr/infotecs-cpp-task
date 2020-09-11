@@ -1,16 +1,8 @@
-#include "connectionclient.hpp"
+#include "connectionprocessor.hpp"
 
 int main()
 {
-  try
-  {
-    ConnectionClient cc;
-    cc.connectToServer();
-  }
-  catch(const std::exception& e)
-  {
-    std::cerr << e.what() << '\n';
-    return -1;
-  }
+  ConnectionProcessor cp;
+  cp.start();
   return 0;
 }

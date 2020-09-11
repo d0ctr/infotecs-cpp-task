@@ -18,16 +18,20 @@ class InputProcessor
     InputProcessor();
     InputProcessor(std::shared_ptr<std::mutex> &input_ptr);
     ~InputProcessor();
+
     void setMutexPtr(std::shared_ptr<std::mutex> &mutex_ptr);
     std::shared_ptr<std::mutex> getMutexPtr();
-    void start();
-  private:
+
+    bool isExceptionOccured();
+
     bool containesEvenNumbers(const std::string &line);
     std::string readInput();
     bool followsRequirements(const std::string &line);
     std::string reformatLine(std::string &line);
     void writeToBuffer(const std::string &line);
-
+    void start();
+    
+  private:
     std::shared_ptr<std::mutex> mutex_ptr;
     bool exception_occured;
 };

@@ -12,15 +12,19 @@
 #include <stdio.h>
 
 #define NAME "/tmp/program1_program2"
+#define MAXLENGTH 6
 
 class ConnectionHost
 {
   public:
     ConnectionHost() = default;
     ~ConnectionHost();
-    void hostServer();
+    void readyHostConnection();
+    std::string readFromSocket();
+
   private:
-    FILE *client_stream;
+    char buf[MAXLENGTH];
+    FILE *read_stream;
     int server_socket;
     int client_socket;
     struct sockaddr_un server_socket_name;

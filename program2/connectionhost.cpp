@@ -3,11 +3,23 @@
 ConnectionHost::~ConnectionHost()
 {
   unlink(server_socket_name.sun_path);
-  close(client_socket);
   close(server_socket);
+  close(client_socket);
 }
 
-void ConnectionHost::hostServer()
+std::string ConnectionHost::readFromSocket()
+{
+  read_stream = fdopen(client_socket, "r");
+  std::string new_line("");
+  char c;
+  while((c = fgetc(read_stream)) != '_')
+  {
+    new_line += c;
+  }
+  return new_line;
+}
+
+void ConnectionHost::readyHostConnection()
 {
   try
   {
@@ -21,11 +33,11 @@ void ConnectionHost::hostServer()
     server_socket_name_size = sizeof(server_socket_name.sun_family) + strlen(server_socket_name.sun_path);
 
     unlink(NAME);
-    if(bind(server_socket, (sockaddr *)&server_socket_name, server_socket_name_size) < 0)
+    if(bind(server_socket, (const sockaddr *)&server_socket_name, server_socket_name_size) < 0)
     {
       throw std::invalid_argument("Cannot bind socket with name.");
     }
-
+    
     if(listen(server_socket, 5) < 0)
     {
       throw std::invalid_argument("Failure on seting que for connections.");
@@ -35,19 +47,14 @@ void ConnectionHost::hostServer()
     {
       throw std::invalid_argument("Client socket descriptor can not be generated.");
     }
-    // send(client_socket, "server\0", 8, 0);
 
-    client_stream = fdopen(client_socket, "r");
-    // char c;
-    // std::string line("");
-    // while((c = fgetc(client_stream)))
-    // {
-    //   line += c;
-    // }
-    // std::cout << line << std::endl;
+    if(readFromSocket() != "start")
+    {
+      throw std::invalid_argument("Wrong connection start.");
+    }
   }
-  catch(const std::exception& e)
+  catch(const std::exception_ptr &e)
   {
-    throw e;
+    std::rethrow_exception(e);
   }
 }

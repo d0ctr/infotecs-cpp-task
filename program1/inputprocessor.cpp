@@ -30,6 +30,11 @@ std::shared_ptr<std::mutex> InputProcessor::getMutexPtr()
   return mutex_ptr;
 }
 
+bool InputProcessor::isExceptionOccured()
+{
+  return exception_occured;
+}
+
 std::string InputProcessor::reformatLine(std::string &line)
 {
   std::sort(line.begin(), line.end(), std::greater<char>());

@@ -3,20 +3,14 @@
 OutputProcessor::OutputProcessor()
 {
   exception_occured = false;
+  cl = ConnectionClient();
 }
 
-OutputProcessor::OutputProcessor(std::shared_ptr<std::mutex> &mutex_ptr)
+OutputProcessor::OutputProcessor(const std::shared_ptr<std::mutex> &mutex_ptr)
 {
   this->mutex_ptr = mutex_ptr;
   exception_occured = false;
-}
-
-OutputProcessor::OutputProcessor(std::shared_ptr<std::mutex> &mutex_ptr, std::string socket_name)
-{
-  this->mutex_ptr = mutex_ptr;
-  socket_name += "1";
-  exception_occured = false;
-  connection = ConnectionHost();
+  cl = ConnectionClient();
 }
 
 OutputProcessor::~OutputProcessor()
@@ -40,7 +34,7 @@ int OutputProcessor::getSum(const std::string &line)
   return sum;
 }
 
-void OutputProcessor::setMutexPtr(std::shared_ptr<std::mutex> &mutex_ptr)
+void OutputProcessor::setMutexPtr(const std::shared_ptr<std::mutex> &mutex_ptr)
 {
   this->mutex_ptr = mutex_ptr;
 }
@@ -48,6 +42,16 @@ void OutputProcessor::setMutexPtr(std::shared_ptr<std::mutex> &mutex_ptr)
 std::shared_ptr<std::mutex> OutputProcessor::getMutexPtr()
 {
   return mutex_ptr;
+}
+
+ConnectionClient OutputProcessor::getConectionClient()
+{
+  return cl;
+}
+
+bool OutputProcessor::isExceptionOccured()
+{
+  return exception_occured;
 }
 
 std::string OutputProcessor::readFromBuffer()
@@ -74,7 +78,7 @@ void OutputProcessor::start()
 {
   try
   {
-    connection.hostServer();
+    cl.readyClientConnection();
     while(true)
     {
       try
@@ -87,7 +91,7 @@ void OutputProcessor::start()
 
         std::string line = readFromBuffer();
         std::cout << "Read from buffer: " << line << std::endl;
-        
+        cl.tryToSend(std::to_string(getSum(line)));
         mutex_ptr->unlock();
         std::this_thread::yield();
       }
@@ -104,7 +108,8 @@ void OutputProcessor::start()
   }
   catch(const std::exception& e)
   {
-    std::cerr << e.what() << '\n';
+    std::cerr << "Cannot not function without running program2." << std::endl;
+    raise(SIGINT);
   }
   mutex_ptr->unlock();
 }
